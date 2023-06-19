@@ -1,0 +1,13 @@
+<!--Fill the code -->
+<mat-toolbar class="mat-elevation-z5">
+    <h2>TekGain</h2>
+</mat-toolbar>
+<router-outlet></router-outlet>
+<mat-sidenav-container *ngIf="!flag">
+    <button class="btn btn-dark" type="button" routerLink="/course">Course</button>
+    <button class="btn btn-dark" type="button" routerLink="/admission">Admission</button>
+    <button class="btn btn-dark" type="button" routerLink="/associate">Associate</button>
+</mat-sidenav-container>
+
+
+  

@@ -1,0 +1,48 @@
+<mat-sidenav-container class="tp-container ">
+    <mat-sidenav mode="side" opened>
+        <section>
+            <span><a routerLink="/course" [queryParams]="{ paramFlag: '1' }">Add Course</a></span>
+        </section>
+        <section>
+            <span><a routerLink="/course" [queryParams]="{ paramFlag: '2' }">Update Course</a></span>
+        </section>
+        <section>
+            <span> <a routerLink="/course" [queryParams]="{ paramFlag: '3' }">View Course By Id</a></span>
+        </section>
+        <section>
+            <span> <a routerLink="/course" [queryParams]="{ paramFlag: '4' }">Ratings</a></span>
+        </section>
+        <section>
+            <span><a routerLink="/course" [queryParams]="{ paramFlag: '5' }">Deactivate Course</a></span>
+        </section>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <p>Course Management System</p>
+        <div *ngIf="paramFlag === 1">
+            <form>
+                <h2>Add Course</h2>
+                <table>
+                    <tr>
+
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        <div *ngIf="paramFlag === 2">
+            <p>paramFlag 2</p>
+        </div>
+
+        <div *ngIf="paramFlag === 3">
+            <p>paramFlag 3</p>
+        </div>
+
+        <div *ngIf="paramFlag === 4">
+            <p>paramFlag 4</p>
+        </div>
+
+        <div *ngIf="paramFlag === 5">
+            <p>paramFlag 5</p>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
