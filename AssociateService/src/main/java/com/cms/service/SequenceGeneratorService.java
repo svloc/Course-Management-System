@@ -1,15 +1,4 @@
 package com.cms.service;
-
-
-// public class SequenceGeneratorService {
-
-    
-// }
-
-// package com.eshoppingzone.productservice.service;
-
-
-
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -6,8 +6,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 @SpringBootApplication
-@ComponentScan({"com.*"})
-@EnableMongoRepositories({"com.*"})
+@ComponentScan({"com.cms.*"})
+@EnableMongoRepositories({"com.cms.*"})
 @EnableFeignClients
 public class AuthenticationAuthorizationServiceApplication {
 

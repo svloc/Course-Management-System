@@ -6,4 +6,6 @@ import com.cms.model.Course;
 
 public interface CourseRepository extends MongoRepository<Course, String> {
 
+    Course findTopByOrderByCourseIdDesc();
+
 }

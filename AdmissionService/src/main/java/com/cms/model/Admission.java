@@ -2,8 +2,12 @@ package com.cms.model;
 
 import java.io.Serializable;
 
-public class Admission implements Serializable {
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "admission")
+public class Admission implements Serializable {
+    @Id
 	private long registrationId;
 	private String courseId;
 	private String associateId;

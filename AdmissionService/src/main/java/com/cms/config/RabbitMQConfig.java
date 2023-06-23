@@ -4,12 +4,13 @@ import java.io.IOException;
 
 
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-
-
-
+import com.rabbitmq.client.ConnectionFactory;
+// import com.rabbitmq.client.Channel;
+// import com.rabbitmq.client.Connection;
+ @Component
 public class RabbitMQConfig
 {
 	@Value("${spring.rabbitmq.queue-name}")
@@ -33,9 +34,15 @@ public class RabbitMQConfig
 
 
 
-	public ConnectionFactory connectionFactory() throws IOException
-	{
-		return null;
+	public ConnectionFactory connectionFactory() throws IOException{ 
+	   ConnectionFactory factory  = new ConnectionFactory();
+	   factory.setHost(host);
+	   factory.setPort(port);
+	   factory.setUsername(userName);
+	   factory.setPassword(password);
+	   factory.setVirtualHost(virtualHost);
+		return factory;
+		
 	}
 
 	public Queue queue()

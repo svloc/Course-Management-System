@@ -2,14 +2,16 @@ package com.cms.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+// import org.springframework.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+// import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+// import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +42,7 @@ public class AuthController {
 	@Autowired
 	UserRepository repository;
 
-	@PostMapping("/sign")
+	@PostMapping("/signin")
 	public ResponseEntity<?> validateUser(@RequestBody LoginRequest loginRequest) {
 
 		try {
@@ -62,13 +64,49 @@ public class AuthController {
 
 	}
 
+	// @GetMapping("/validateToken/{authorization}")
+	// public boolean validateToken(@PathVariable String authorization) {
+	// try {
+	// String jwt = parseJwt(authorization);
+
+	// if (jwt != null && jwtTokenUtil.validateToken(jwt)) {
+	// String username = jwtTokenUtil.getUsernameFromToken(jwt);
+	// UserDetails userDetails =
+	// userDetailsServiceImpl.loadUserByUsername(username);
+	// UsernamePasswordAuthenticationToken authentication = new
+	// UsernamePasswordAuthenticationToken(
+	// userDetails, null, userDetails.getAuthorities());
+	// authentication.setDetails(new WebAuthenticationDetailsSource());
+	// SecurityContextHolder.getContext().setAuthentication(authentication);
+	// return true;
+	// } else {
+	// return false;
+	// }
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// return false;
+
+	// }
+
+	// }
+
+	// private String parseJwt(String authorization) {
+	// String headerAuth = authorization;
+
+	// if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+	// return headerAuth.substring(7, headerAuth.length());
+	// }
+
+	// return null;
+	// }
+
 	@GetMapping("/validateToken/{authorization}")
-	public ResponseEntity<String> validateToken(@PathVariable String authorization) {
+	public boolean isValidToken(@PathVariable String authorization) {
 		String token = authorization.substring(7);
 		if (jwtTokenUtil.validateToken(token)) {
-			return ResponseEntity.ok("Token is valid");
+			return true;
 		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token is invalid");
+			return false;
 		}
 	}
 

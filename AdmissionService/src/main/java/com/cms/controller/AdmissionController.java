@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.cms.exception.AdmissionInvalidException;
 import com.cms.model.Admission;
+// import com.cms.model.Associate;
 import com.cms.service.AdmissionServiceImpl;
 
 import java.util.List;
@@ -101,5 +102,11 @@ public class AdmissionController {
     //     }
 
     // }
+
+    @GetMapping("/viewAll")
+    public ResponseEntity<List<Admission>> viewAllAssociates() {
+        List<Admission> associateList = admissionService.viewAll();
+        return ResponseEntity.ok(associateList);
+    }
 
 }

@@ -1,8 +1,12 @@
 
 package com.cms.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "course")
 public class Course {
-	
+	@Id
 	private String courseId;
 	
 	public String getCourseId() {

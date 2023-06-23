@@ -1,8 +1,8 @@
 package com.cms.proxy;
 
-import org.springframework.cloud.openfeign.FeignClient;
+// import org.springframework.cloud.openfeign.FeignClient;
 
-@FeignClient()
+// @FeignClient()
 public interface ServiceProxy {
 	
 }

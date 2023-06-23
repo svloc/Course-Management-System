@@ -7,48 +7,61 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.cms.jwt.TokenFilter;
 import com.cms.service.UserDetailsServiceImpl;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class SecurityConfig {
 	@Autowired
 	private UserDetailsServiceImpl userDetailsServiceImpl;
+	@Autowired
+	TokenFilter filter;
 
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
-
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
 		authProvider.setUserDetailsService(userDetailsServiceImpl);
-
 		authProvider.setPasswordEncoder(passwordEncoder());
-
 		return authProvider;
-
 	}
 
 	@Bean
 	public SecurityFilterChain doFilter(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests().requestMatchers("/app/**").permitAll().requestMatchers("/api/admin/**")
-				.authenticated()
-				.requestMatchers("/api/user/**").authenticated()
-				.and()
-				.formLogin().and().csrf().disable()
-				.userDetailsService(userDetailsServiceImpl).exceptionHandling()
-				.authenticationEntryPoint((request, response, authException) -> response
-						.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()))
-				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.authenticationProvider(authenticationProvider());
-		return http.build();
+	http.authorizeHttpRequests().requestMatchers("/app/**").permitAll().requestMatchers("/app/adin/**")
+	.authenticated()
+	.requestMatchers("/app/usr/**").authenticated()
+	.and()
+	.formLogin().and().csrf().disable()
+	.userDetailsService(userDetailsServiceImpl).exceptionHandling()
+	.authenticationEntryPoint((request, response, authException) -> response
+	.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()))
+	.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+	http.authenticationProvider(authenticationProvider());
+	http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+	return http.build();
 	}
+	// @Bean
+	// public SecurityFilterChain doFilter(HttpSecurity http) throws Exception {
+	// 	http.authorizeHttpRequests().requestMatchers("/app/**").permitAll().requestMatchers("/app/admn/**")
+	// 			.hasAuthority("ROLE_ADMIN").anyRequest().authenticated().and()
+	// 			.formLogin().and().csrf().disable().cors().disable().userDetailsService(userDetailsServiceImpl).exceptionHandling()
+	// 			.authenticationEntryPoint((request, response, authException) -> response
+	// 					.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()))
+	// 			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+	// 	http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+	// 	return http.build();
+
+	// }
 
 	@Bean
 	AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
@@ -60,5 +73,3 @@ public class SecurityConfig {
 		return NoOpPasswordEncoder.getInstance();
 	}
 }
-
-// include authecation provider before build

@@ -3,15 +3,18 @@ package com.cms.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cms.exception.AdmissionInvalidException;
 import com.cms.model.Admission;
+import com.cms.repository.AdmissionRepository;
 
 @Service
 public class AdmissionServiceImpl implements IAdmissionService {
 
-	
+	@Autowired AdmissionRepository admissionRepository;
+
 	public Admission registerAssociateForCourse(Admission admission)throws AdmissionInvalidException {
 		
 		return null;
@@ -45,9 +48,8 @@ public class AdmissionServiceImpl implements IAdmissionService {
 		return false;
 	}
 
-	@Override
 	public List<Admission> viewAll() {
-		return null;
+		return admissionRepository.findAll();
 	}
 
 }

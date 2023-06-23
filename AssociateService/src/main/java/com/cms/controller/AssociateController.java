@@ -18,13 +18,17 @@ public class AssociateController {
 
 
     @PostMapping("/addAssociate")
-    public ResponseEntity<Associate> addAssociate(@RequestBody Associate associate) {
-            Associate savedAssociate = associateService.addAssociate(associate);
-            return ResponseEntity.ok(savedAssociate);
-    }
+	public ResponseEntity<?> addAssociate(@RequestBody Associate associate) {
+		try {
+			Associate associateObj = associateService.addAssociate(associate);
+			return ResponseEntity.ok(associateObj);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
 
     @PutMapping("/updateAssociate/{associateId}/{associateAddr}")
-    public ResponseEntity<Associate> updateAssociateAddress(@PathVariable("associateId") String associateId,@PathVariable("associateAddr") String associateAddr) {
+    public ResponseEntity<Associate> updateAssociate(@PathVariable("associateId") String associateId,@PathVariable("associateAddr") String associateAddr) {
         try {
             Associate updatedAssociate = associateService.updateAssociate(associateId, associateAddr);
             if (updatedAssociate != null) {

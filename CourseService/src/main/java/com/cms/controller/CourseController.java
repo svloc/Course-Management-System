@@ -27,9 +27,7 @@ public class CourseController {
     }
 
     @PutMapping("/updateDuration/{courseId}/{duration}")
-    public ResponseEntity<Course> updateCourse(
-            @PathVariable("courseId") String courseId,
-            @PathVariable("duration") Integer duration) {
+    public ResponseEntity<Course> updateCourse(@PathVariable("courseId") String courseId,@PathVariable("duration") Integer duration) {
         try {
             Course updatedCourse = courseService.updateCourse(courseId, duration);
             if (updatedCourse != null) {
@@ -105,4 +103,5 @@ public class CourseController {
         List<Course> courseList = courseService.viewAll();
         return ResponseEntity.ok(courseList);
     }
+
 }
