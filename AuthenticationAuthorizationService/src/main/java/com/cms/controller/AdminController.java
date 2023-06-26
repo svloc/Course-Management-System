@@ -27,7 +27,7 @@ import org.springframework.validation.annotation.Validated;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/myapp/admin")
 public class AdminController {
 
 	@Autowired

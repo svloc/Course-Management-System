@@ -5,12 +5,12 @@ import java.io.IOException;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+// import org.springframework.stereotype.Component;
 
 import com.rabbitmq.client.ConnectionFactory;
 // import com.rabbitmq.client.Channel;
 // import com.rabbitmq.client.Connection;
- @Component
+//  @Component
 public class RabbitMQConfig
 {
 	@Value("${spring.rabbitmq.queue-name}")

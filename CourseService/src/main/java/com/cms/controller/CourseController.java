@@ -17,7 +17,7 @@ public class CourseController {
     @Autowired CourseServiceImpl courseService;
 
     @PostMapping("/saveCourse")
-    public ResponseEntity<Course> addCourse(@RequestBody Course course) {
+    public ResponseEntity<Course> saveCourse(@RequestBody Course course) {
         try {
             Course savedCourse = courseService.addCourse(course);
             return ResponseEntity.ok(savedCourse);
@@ -27,7 +27,7 @@ public class CourseController {
     }
 
     @PutMapping("/updateDuration/{courseId}/{duration}")
-    public ResponseEntity<Course> updateCourse(@PathVariable("courseId") String courseId,@PathVariable("duration") Integer duration) {
+    public ResponseEntity<Course> updateDuration(@PathVariable("courseId") String courseId,@PathVariable("duration") Integer duration) {
         try {
             Course updatedCourse = courseService.updateCourse(courseId, duration);
             if (updatedCourse != null) {
@@ -41,7 +41,7 @@ public class CourseController {
     }
 
     @GetMapping("/viewCourseByCourseId/{courseId}")
-    public ResponseEntity<Course> viewByCourseId(@PathVariable("courseId") String courseId) {
+    public ResponseEntity<Course> viewCourseByCourseId(@PathVariable("courseId") String courseId) {
         try {
             Course course = courseService.viewByCourseId(courseId);
             if (course != null) {
@@ -55,7 +55,7 @@ public class CourseController {
     }
 
     @GetMapping("/viewFeedback/{courseId}")
-    public ResponseEntity<Float> findFeedbackRatingForCourseId(@PathVariable("courseId") String courseId) {
+    public ResponseEntity<Float> viewFeedback(@PathVariable("courseId") String courseId) {
         try {
             float feedback = courseService.findFeedbackRatingForCourseId(courseId);
             if (feedback > 0) {
@@ -69,7 +69,7 @@ public class CourseController {
     }
 
     @PutMapping("/calculateAverageFeedback/{courseId}/{rating}")
-    public ResponseEntity<String> calculateAverageFeedbackAndUpdate(
+    public ResponseEntity<String> calculateAverageFeedback(
             @PathVariable("courseId") String courseId,
             @PathVariable("rating") float rating) {
         try {
@@ -85,7 +85,7 @@ public class CourseController {
     }
 
     @DeleteMapping("/deactivate/{courseId}")
-    public ResponseEntity<String> deactivateCourse(@PathVariable("courseId") String courseId) {
+    public ResponseEntity<String> deactivate(@PathVariable("courseId") String courseId) {
         try {
             Course deactivatedCourse = courseService.deactivateCourse(courseId);
             if (deactivatedCourse != null) {

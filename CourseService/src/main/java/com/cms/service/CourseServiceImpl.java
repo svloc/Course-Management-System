@@ -13,7 +13,6 @@ import com.cms.repository.CourseRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 @Service
 @Transactional
 @Slf4j
@@ -21,26 +20,25 @@ public class CourseServiceImpl implements ICourseService {
 
 	@Autowired
 	private CourseRepository courseRepository;
+
 	@Autowired
 	SequenceGeneratorService sequenceGeneratorService;
 
 	@Override
 	public Course addCourse(Course cObj) throws CourseInvalidException {
-		// String courseId = sequenceGeneratorService.generateCourseId();
-
-		// cObj.setCourseId(courseId);
-		Course course = courseRepository.findById(cObj.getCourseId()).orElse(null);
-		if (course!=null) {
+		Course course;
+		try {
+			course = courseRepository.save(cObj);
+			log.info("The method addAssociate has completed successfully");
+		} catch (IllegalArgumentException e) {
 			log.error("CourseId already exists");
 			throw new CourseInvalidException("CourseId already exists");
 		}
-		log.info("The method addCourse has completed successfully");
-		return courseRepository.save(cObj);
+		return course;
 	}
 
 	@Override
 	public Course updateCourse(String courseId, Integer duration) throws CourseInvalidException {
-
 		Course course = courseRepository.findById(courseId).orElse(null);
 		if (course == null) {
 			log.error("CourseId does not exists");
@@ -53,6 +51,7 @@ public class CourseServiceImpl implements ICourseService {
 		}
 
 	}
+
 
 	@Override
 	public Course viewByCourseId(String courseId) throws CourseInvalidException {
@@ -80,7 +79,6 @@ public class CourseServiceImpl implements ICourseService {
 	}
 
 	public float findFeedbackRatingForCourseId(String courseId) throws CourseInvalidException {
-
 		Course course = courseRepository.findById(courseId).orElse(null);
 		if (course == null) {
 			log.error("CourseId does not exist");
