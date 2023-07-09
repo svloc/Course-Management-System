@@ -1,48 +1,218 @@
-<mat-sidenav-container class="tp-container ">
-    <mat-sidenav mode="side" opened>
-        <section>
-            <span><a routerLink="/course" [queryParams]="{ paramFlag: '1' }">Add Course</a></span>
-        </section>
-        <section>
-            <span><a routerLink="/course" [queryParams]="{ paramFlag: '2' }">Update Course</a></span>
-        </section>
-        <section>
-            <span> <a routerLink="/course" [queryParams]="{ paramFlag: '3' }">View Course By Id</a></span>
-        </section>
-        <section>
-            <span> <a routerLink="/course" [queryParams]="{ paramFlag: '4' }">Ratings</a></span>
-        </section>
-        <section>
-            <span><a routerLink="/course" [queryParams]="{ paramFlag: '5' }">Deactivate Course</a></span>
-        </section>
+<mat-sidenav-container class="vh-100 top-130 position-relative mat-sidenav-container-bg">
+    <mat-sidenav mode="side" opened class="h-100 mat-sidenav-bg mat-sidenav-custome">
+        <p routerLink="/course" [queryParams]="{ paramFlag: '1' }" routerLinkActive="active-route" class="cursor-pointer ">Add Course</p>
+        <p routerLink="/course" [queryParams]="{ paramFlag: '2' }" routerLinkActive="active-route" class="cursor-pointer ">Update Course</p>
+        <p routerLink="/course" [queryParams]="{ paramFlag: '3' }" routerLinkActive="active-route" class="cursor-pointer ">View Course By Id</p>
+        <p routerLink="/course" [queryParams]="{ paramFlag: '4' }" routerLinkActive="active-route" class="cursor-pointer ">Ratings</p>
+        <p routerLink="/course" [queryParams]="{ paramFlag: '5' }" routerLinkActive="active-route" class="cursor-pointer ">Deactivate Course</p>
     </mat-sidenav>
-    <mat-sidenav-content>
-        <p>Course Management System</p>
-        <div *ngIf="paramFlag === 1">
-            <form>
+    <mat-sidenav-content class="px-4 py-3">
+        <h4>Course Management System</h4>
+        <div *ngIf="paramFlag == 1" class="text-center d-flex justify-content-center">
+            <form (ngSubmit)="addCourse()">
                 <h2>Add Course</h2>
                 <table>
                     <tr>
-
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Course Id*</mat-label>
+                                <input matInput id="courseId" name="courseId" [(ngModel)]="courseModel.courseId">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Course Name*</mat-label>
+                                <input matInput name="courseName" [(ngModel)]="courseModel.courseName" id="courseName">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Fees*</mat-label>
+                                <input matInput type="number" name="fees" [(ngModel)]="courseModel.fees" id="fees">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Duration*</mat-label>
+                                <input matInput type="number" name="duration" [(ngModel)]="courseModel.duration"
+                                    id="duration">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Course Type*</mat-label>
+                                <input matInput name="courseType" [(ngModel)]="courseModel.courseType" id="courseType">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><button class="btn btn-dark" type="submit" id="addCourse">Add Course</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div *ngIf="message" id="result">{{message}}</div>
+                            <div *ngIf="error" id="error">{{error}}</div>
+                        </td>
                     </tr>
                 </table>
             </form>
         </div>
 
-        <div *ngIf="paramFlag === 2">
-            <p>paramFlag 2</p>
+        <div *ngIf="paramFlag == 2" class="text-center d-flex justify-content-center">
+            <form (ngSubmit)="updateCourse()">
+                <h2>Update Course Duration</h2>
+                <table>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-select [(ngModel)]="courseId" id="courseId" name="courseId">
+                                    <mat-option *ngFor="let course of courses" [value]="course.courseId">
+                                        {{ course.courseId }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Update Duration</mat-label>
+                                <input matInput type="number" name="duration" [(ngModel)]="duration"
+                                    id="duration">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-dark" type="submit" id="updateCourse">Update Course</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div *ngIf="message" id="result">{{ message }}</div>
+                            <div *ngIf="error" id="error">{{ error }}</div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
         </div>
 
-        <div *ngIf="paramFlag === 3">
-            <p>paramFlag 3</p>
+        <div *ngIf="paramFlag == 3" class="text-center d-flex justify-content-center">
+            <form (ngSubmit)="viewCourseById()">
+                <h2>View Course details By Id</h2>
+                <table>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-select [(ngModel)]="courseId" id="duration" name="courseId">
+                                    <mat-option *ngFor="let course of courses" [value]="course.courseId">
+                                        {{ course.courseId }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                        <td> <button class="btn btn-dark" type="submit" id="viewByDuration">Search Course</button></td>
+                    </tr>
+                </table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Course Id</th>
+                            <th scope="col">Course Name</th>
+                            <th scope="col">Fess</th>
+                            <th scope="col">Duration</th>
+                            <th scope="col">Course Type</th>
+                            <th scope="col">Ratings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let course of courseById">
+                            <td>{{course.courseId}}</td>
+                            <td>{{course.courseName}}</td>
+                            <td>{{course.fees}}</td>
+                            <td>{{course.duration}}</td>
+                            <td>{{course.courseType}}</td>
+                            <td>{{course.rating}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
         </div>
 
-        <div *ngIf="paramFlag === 4">
-            <p>paramFlag 4</p>
+        <div *ngIf="paramFlag == 4" class="text-center d-flex justify-content-center">
+            <form (ngSubmit)="viewRatings()">
+                <h2>Course Feedback Ratings</h2>
+                <table>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-select [(ngModel)]="courseId" id="duration" name="courseId">
+                                    <mat-option *ngFor="let course of courses" [value]="course.courseId">
+                                        {{ course.courseId }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                        <td> <button class="btn btn-dark" type="submit" id="viewRating">Search Course</button></td>
+                    </tr>
+                </table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Course Id</th>
+                            <th scope="col">Course Name</th>
+                            <th scope="col">Fess</th>
+                            <th scope="col">Duration</th>
+                            <th scope="col">Course Type</th>
+                            <th scope="col">Ratings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let course of ratings">
+                            <td>{{course.courseId}}</td>
+                            <td>{{course.courseName}}</td>
+                            <td>{{course.fees}}</td>
+                            <td>{{course.duration}}</td>
+                            <td>{{course.courseType}}</td>
+                            <td>{{course.rating}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
         </div>
 
-        <div *ngIf="paramFlag === 5">
-            <p>paramFlag 5</p>
+        <div *ngIf="paramFlag == 5" class="text-center d-flex justify-content-center">
+            <form (ngSubmit)="disableCourse()">
+                <h2>Disable Course</h2>
+                <table>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-select [(ngModel)]="courseId" id="duration" name="courseId">
+                                    <mat-option *ngFor="let course of courses" [value]="course.courseId">
+                                        {{ course.courseId }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                        <td> <button class="btn btn-dark" type="submit" id="disableCourse">Disable Course</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div *ngIf="message" id="result">{{ message }}</div>
+                            <div *ngIf="error" id="error">{{ error }}</div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

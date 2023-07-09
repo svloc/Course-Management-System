@@ -16,7 +16,7 @@ import com.cms.model.Admission;
 import com.cms.model.Order;
 
 
-@FeignClient(value = "admissionService", url = "http://localhost:9093")
+@FeignClient(value = "admissionservice", url = "http://localhost:9093")
 public interface AdmissionProxy {
 
 	@PostMapping(value = "/admission/register/{associateId}/{courseId}", produces = "application/json")

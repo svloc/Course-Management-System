@@ -1,1 +1,141 @@
-<!--Fill the code -->
+<mat-sidenav-container class="vh-100  top-130 position-relative mat-sidenav-container-bg">
+    <mat-sidenav mode="side" opened class="h-100 mat-sidenav-bg mat-sidenav-custome">
+        <p routerLink="/associate" [queryParams]="{ paramFlag: '1' }" routerLinkActive="active-route" class="cursor-pointer ">Add Associate</p>
+        <p routerLink="/associate" [queryParams]="{ paramFlag: '2' }" routerLinkActive="active-route" class="cursor-pointer ">Update Associate</p>
+        <p routerLink="/associate" [queryParams]="{ paramFlag: '3' }" routerLinkActive="active-route" class="cursor-pointer ">View Associate</p>
+    </mat-sidenav>
+    <mat-sidenav-content class="px-4 py-3">
+        <h4>Associate Management System</h4>
+        <div *ngIf="paramFlag == 1" class="text-center d-flex justify-content-center">
+            <form (ngSubmit)="addAssociate()">
+                <h2> Add Associate</h2>
+                <table>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Associate Id</mat-label>
+                                <input matInput id="associateId" name="associateId" [(ngModel)]="associateModel.associateId">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Associate Name</mat-label>
+                                <input matInput name="associateName" [(ngModel)]="associateModel.associateName"
+                                    id="associateName">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Email Id</mat-label>
+                                <input matInput type="email" name="associateEmailId"
+                                    [(ngModel)]="associateModel.associateEmailId" id="associateEmailId">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Associate Address</mat-label>
+                                <input matInput name="associateAddress" [(ngModel)]="associateModel.associateAddress"
+                                    id="associateAddress">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><button class="btn btn-dark" type="submit" id="addCourse">Add Associate</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div *ngIf="message" id="result">{{message}}</div>
+                            <div *ngIf="error" id="error">{{error}}</div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        <div *ngIf="paramFlag == 2" class="text-center d-flex justify-content-center">
+            <form (ngSubmit)="updateCourse()">
+                <h2>Update Associate Details</h2>
+                <table>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-select [(ngModel)]="associateModel.associateId" id="associateId" name="associateId">
+                                    <mat-option *ngFor="let associate of associates" [value]="associate.associateId">
+                                        {{ associate.associateId }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Associate Address</mat-label>
+                                <input matInput name="associateAddress" [(ngModel)]="associateModel.associateAddress"
+                                    id="associateAddress">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-dark" type="submit" id="updateAssociate">Update Associate</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div *ngIf="message" id="result">{{ message }}</div>
+                            <div *ngIf="error" id="error">{{ error }}</div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        <div *ngIf="paramFlag == 3" class="text-center d-flex justify-content-center">
+            <form (ngSubmit)="viewAssociates()">
+                <h2>Associate details</h2>
+                <table>
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-select [(ngModel)]="associateModel.associateId" id="associateId" name="associateId">
+                                    <mat-option *ngFor="let associate of associates"
+                                        [value]="associate.associateId">
+                                        {{ associate.associateId }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <button class="btn btn-dark" type="submit" id="viewAssociate">View Associate</button>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Associate Id</th>
+                            <th scope="col">Associate Name</th>
+                            <th scope="col">Associate EmailId</th>
+                            <th scope="col">Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let associate of associatesById">
+                            <td>{{associate.associateId}}</td>
+                            <td>{{associate.associateName}}</td>
+                            <td>{{associate.associateEmailId}}</td>
+                            <td>{{associate.associateAddress}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

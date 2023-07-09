@@ -1,36 +1,29 @@
 package com.cms.aspect;
 
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import lombok.extern.slf4j.Slf4j;
-
-// import org.aspectj.lang.JoinPoint;
-// import org.aspectj.lang.annotation.AfterReturning;
-// import org.aspectj.lang.annotation.AfterThrowing;
- import org.aspectj.lang.annotation.Aspect;
-// import org.aspectj.lang.annotation.Before;
-// import org.aspectj.lang.annotation.Pointcut;
-
-@Aspect
 @Component
+@Aspect
 @Slf4j
 public class LoggingAspect {
+    @Pointcut("execution(* com.cms.service.AssociateServiceImpl.*(..))")
+    public void serviceMethods() {
+    }
 
-//   @Pointcut("execution(* com.cms.service.*(..))")
-//   public void serviceMethods() {}
+    @AfterReturning(pointcut = "serviceMethods()", returning = "result")
+    public void logSuccess(JoinPoint joinPoint, Object result) {
+        String methodName = joinPoint.getSignature().getName();
+        log.info("The method {} has completed successfully.", methodName);
+    }
 
-//   @Before("serviceMethods()")
-//   public void logBefore(JoinPoint joinPoint) {
-//     log.info("Entering method: {}", joinPoint.getSignature().toShortString());
-//   }
-
-//   @AfterReturning(value = "serviceMethods()", returning = "result")
-//   public void logAfterReturning(JoinPoint joinPoint, Object result) {
-//     log.info("The method {} has completed successfully", joinPoint.getSignature().toShortString());
-//   }
-
-//   @AfterThrowing(value = "serviceMethods()", throwing = "exception")
-//   public void logAfterThrowing(JoinPoint joinPoint, Exception exception) {
-//     log.error("Exception in method {}: {}", joinPoint.getSignature().toShortString(), exception.getMessage());
-//   }
+    @AfterThrowing(pointcut = "serviceMethods()", throwing = "exception")
+    public void logFailure(JoinPoint joinPoint, Exception exception) {
+        log.error(exception.getMessage());
+    }
 }

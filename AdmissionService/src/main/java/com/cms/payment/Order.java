@@ -1,4 +1,11 @@
 package com.cms.payment;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
 
 	private double price;
@@ -6,6 +13,7 @@ public class Order {
 	private String method;
 	private String intent;
 	private String description;
+	
 	public double getPrice() {
 		return price;
 	}

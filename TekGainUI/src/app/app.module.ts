@@ -26,11 +26,11 @@ import { CourseComponent } from './course/course.component';
 import { AdmissionComponent } from './admission/admission.component';
 import { AssociateComponent } from './associate/associate.component';
 import { LoginComponent } from './login/login.component';
+import { MatSelectModule } from '@angular/material/select';
  
 export const routes: Routes = [
  
 // Fill code for routing
-{path:'', component:LoginComponent},
 {path:'course', component:CourseComponent},
 {path:'admission', component:AdmissionComponent},
 {path:'associate', component:AssociateComponent},
@@ -50,7 +50,7 @@ export const routes: Routes = [
     AppRoutingModule,FormsModule,ReactiveFormsModule,HttpClientModule,
     BrowserAnimationsModule,MatFormFieldModule,MatInputModule,MatProgressSpinnerModule,MatTableModule,
 	MatFormFieldModule,MatInputModule,MatProgressSpinnerModule,MatTableModule,
-    MatButtonModule,MatToolbarModule,MatCardModule,  MatButtonModule, MatCardModule, 
+    MatButtonModule,MatToolbarModule,MatCardModule,  MatButtonModule, MatSelectModule, 
     MatIconModule,MatSidenavModule,MatListModule,RouterModule.forRoot(routes)
   ],
   providers: [],

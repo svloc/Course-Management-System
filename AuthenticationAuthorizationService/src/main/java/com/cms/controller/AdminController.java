@@ -27,8 +27,14 @@ import org.springframework.validation.annotation.Validated;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/myapp/admin")
+@RequestMapping("/api/admin")
 public class AdminController {
+    
+	// test kar ke dekho chal rah hai ky
+	// @GetMapping("/")
+	// public String AdminTest(){
+	// 	return "Admin hai mai..";
+	// }
 
 	@Autowired
 	private CourseProxy courseproxy;
@@ -43,7 +49,6 @@ public class AdminController {
 	@GetMapping(value = "/course/viewAll", produces = "application/json")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<Course>> viewAll(@RequestHeader("Authorization") String authorization) {
-		System.out.println("output");
 		return courseproxy.viewAll(authorization);
 	}
 
@@ -133,3 +138,4 @@ public class AdminController {
 		return admissionproxy.viewAll(authorization);
 	}
 }
+

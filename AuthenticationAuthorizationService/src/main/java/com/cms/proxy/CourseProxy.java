@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.cms.model.Course;
 
-@FeignClient(value = "courseService", url = "http://localhost:9091")
+@FeignClient(value = "courseservice", url = "http://localhost:9091")
 public interface CourseProxy {
 
     @GetMapping(value = "/course/viewByCourseId/{courseId}", produces = "application/json")
@@ -27,13 +27,13 @@ public interface CourseProxy {
     @PostMapping(value = "/course/addCourse", produces = "application/json")
     public ResponseEntity<Course> addCourse(@RequestBody @Validated Course cObj,@RequestHeader("Authorization") String authorization);
 
-    @PutMapping(value = "/course/update/{courseId}/{courseFees}", produces = "application/json")
-    public ResponseEntity<Course> updateCourse(@PathVariable String courseId, @PathVariable Integer courseFees,@RequestHeader("Authorization") String authorization);
+    @PutMapping(value = "/course/update/{courseId}/{duration}", produces = "application/json")
+    public ResponseEntity<Course> updateCourse(@PathVariable String courseId, @PathVariable Integer duration,@RequestHeader("Authorization") String authorization);
 
     @GetMapping(value = "/course/viewFeedbackRating/{courseId}", produces = "application/json")
     public ResponseEntity<Float> findFeedbackForCourseId(@PathVariable String courseId,@RequestHeader("Authorization") String authorization);
 
-    @DeleteMapping(value = "/course/deactivate/{courseId}", produces = "application/json")
+    @DeleteMapping(value = "/course/deactivateCourse/{courseId}", produces = "application/json")
     public ResponseEntity<Course> deactivateCourse(@PathVariable String courseId,@RequestHeader("Authorization") String authorization);
 
     @GetMapping(value = "/course/viewAll", produces = "application/json")

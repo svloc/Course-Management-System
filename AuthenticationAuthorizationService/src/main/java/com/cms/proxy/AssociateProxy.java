@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.cms.model.Associate;
 
-@FeignClient(value = "associateService", url = "http://localhost:9092")
+@FeignClient(value = "associateservice", url = "http://localhost:9092")
 public interface AssociateProxy {
 	@PostMapping(value = "/associate/addAssociate", produces = "application/json")
 	public ResponseEntity<Associate> addAssociate(@RequestBody @Validated Associate cObj,
@@ -24,9 +24,9 @@ public interface AssociateProxy {
 	public ResponseEntity<Associate> viewByAssociateId(@PathVariable String associateId,
 			@RequestHeader("Authorization") String authorization);
 
-	@PutMapping(value = "/associate/updateAssociate/{associateId}/{associateAddress}", produces = "application/json")
+	@PutMapping(value = "/associate/updateAssociate/{associateId}/{associateAddr}", produces = "application/json")
 	public ResponseEntity<Associate> updateAssociate(@PathVariable String associateId,
-			@PathVariable String associateAddress, @RequestHeader("Authorization") String authorization);
+			@PathVariable String associateAddr, @RequestHeader("Authorization") String authorization);
 
 	@GetMapping(value = "/associate/viewAll", produces = "application/json")
 	public ResponseEntity<List<Associate>> viewAll(@RequestHeader("Authorization") String authorization);

@@ -7,6 +7,7 @@
         <label for="password">Password</label>
         <input type="password" class="form-control" id="password" placeholder="Password" [(ngModel)]="user.password" name="password">
     </div>
-    <button type="submit" id="login" class="btn btn-primary">Sign in</button>
+    <button type="submit" id="login" class="btn btn-lg btn-primary">Sign in</button>
+    <div *ngIf="errorMsg">{{errorMsg}}</div>
 </form>
 

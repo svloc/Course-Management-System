@@ -48,23 +48,25 @@ describe('AppComponent', () => {
       });  
 
  
-  it('should have the router for Course menu' , fakeAsync(() => { 
-		//Fill the code
-   
-	}));
+    it('should have the router for Course menu', fakeAsync(() => {
+    router.navigate(['/course']);
+    tick();
+    expect(router.url).toBe('/course');
+  }));
 
-  it('should have the router for Associate menu' , fakeAsync(() => { 
-	
-    	//Fill the code
-   
-	})); 
-	
-	
-  it('should have the router for Admission menu' , fakeAsync(() => { 
-	
-	//Fill the code
-   
-	})); 
+  it('should have the router for Associate menu', fakeAsync(() => {
+    router.navigate(['/associate']);
+    tick();
+    expect(router.url).toBe('/associate');
+  }));
+
+  it('should have the router for Admission menu', fakeAsync(() => {
+    router.navigate(['/admission']);
+    tick();
+    expect(router.url).toBe('/admission');
+  }));
    
 
-});
+ });
+
+

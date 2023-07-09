@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.validation.constraints.NotEmpty;
 @Document
 @Getter
 @Setter
@@ -22,7 +23,7 @@ public class Associate implements Serializable{
 	
 	@Id
 	private String associateId;	
-	@jakarta.validation.constraints.NotEmpty(message="Name cannot be empty")
+	@NotEmpty(message="Name cannot be empty")
 	private String associateName;	
 	private String associateAddress;	
 	private String associateEmailId;

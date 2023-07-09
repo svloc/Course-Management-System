@@ -13,7 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-// import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.cms.jwt.TokenFilter;
 import com.cms.service.UserDetailsServiceImpl;
@@ -34,32 +34,32 @@ public class SecurityConfig {
 		return authProvider;
 	}
 
-	// @Bean
-	// public SecurityFilterChain doFilter(HttpSecurity http) throws Exception {
-	// http.authorizeHttpRequests().requestMatchers("/app/**").permitAll().requestMatchers("/app/adin/**")
-	// .authenticated()
-	// .requestMatchers("/app/usr/**").authenticated()
-	// .and()
-	// .formLogin().and().csrf().disable()
-	// .userDetailsService(userDetailsServiceImpl).exceptionHandling()
-	// .authenticationEntryPoint((request, response, authException) -> response
-	// .sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()))
-	// .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-	// http.authenticationProvider(authenticationProvider());
-	// http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
-	// return http.build();
-	// }
-
 	@Bean
 	public SecurityFilterChain doFilter(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests().requestMatchers("/app/**").permitAll().requestMatchers("/myapp/**").authenticated().and()
-				.formLogin().and().csrf().disable().userDetailsService(userDetailsServiceImpl).exceptionHandling()
-				.authenticationEntryPoint((request, response, authException) -> response
-						.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()))
-				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-		return http.build();
+	http.authorizeHttpRequests().requestMatchers("/app/**").permitAll().anyRequest()
+	.authenticated().and()
+	.formLogin().and().csrf().disable()
+	.userDetailsService(userDetailsServiceImpl).exceptionHandling()
+	.authenticationEntryPoint((request, response, authException) -> response
+	.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()))
+	.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+	
+	http.authenticationProvider(authenticationProvider());
+	http.cors().and().csrf().disable();
+	http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+	return http.build();
 	}
+
+	// @Bean
+	// public SecurityFilterChain doFilter(HttpSecurity http) throws Exception {
+	// 	http.authorizeHttpRequests().requestMatchers("/app/**").permitAll().requestMatchers("/myapp/**").authenticated().and()
+	// 			.formLogin().and().csrf().disable().userDetailsService(userDetailsServiceImpl).exceptionHandling()
+	// 			.authenticationEntryPoint((request, response, authException) -> response
+	// 					.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()))
+	// 			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    //         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+	// 	return http.build();
+	// }
 
 	
 	@Bean

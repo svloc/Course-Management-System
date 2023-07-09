@@ -39,6 +39,7 @@ public class AuthController {
 
 	@Autowired
 	private UserDetailsServiceImpl userDetailsServiceImpl;
+	
 	@Autowired
 	UserRepository repository;
 
@@ -63,6 +64,7 @@ public class AuthController {
 		}
 
 	}
+	
 	@GetMapping("/validateToken/{authorization}")
 	public boolean isValidToken(@PathVariable String authorization) {
 		String token = authorization.substring(7);

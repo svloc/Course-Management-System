@@ -21,7 +21,7 @@ import com.cms.proxy.AssociateProxy;
 import com.cms.proxy.CourseProxy;
 
 @RestController
-@RequestMapping("/myapp/user")
+@RequestMapping("/api/user")
 public class UserController {
 
 	@Autowired

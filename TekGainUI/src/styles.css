@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import url("../node_modules/bootstrap/dist/css/bootstrap.min.css");
 
+/* 
 .home {
   color: blue;
   text-align: center;
@@ -10,18 +11,18 @@
 
 .example-spacer {
   flex: 1 0 auto;
-  /* text-align: center; */
-}
+ text-align: center; 
+} 
 
-.example-container {
+ .example-container {
   width: 150px;
   height: 600px;
-  /* margin: 0px; */
-  /* border: 1px solid #555; */
-}
+  margin: 0px;
+  border: 1px solid #555;
+} 
 
 .tp-container {
-  /* position: absolute; */
+   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
@@ -53,7 +54,7 @@
   background-color: #f5f7fa;
   color: #341818;
 }
-
+*/
 h2 {
   margin-top: 0px;
   margin-left: 0px;
@@ -65,9 +66,9 @@ h2 {
   background-color: #16A085 ;
 } */
 
-.flex-container {
+/* .flex-container {
   display: flex;
-  /* width:500px; */
+  width:500px; 
   margin-top: 70px;
   margin-left: 160px;
   margin-right: auto;
@@ -83,13 +84,13 @@ h2 {
   margin: 10px;
   text-align: center;
   line-height: 100px;
-}
+} */
 
 body {
   background-color: #16A085;
 }
 
-p {
+/* p {
   text-align: center;
   font-style: italic;
   color: white;
@@ -98,10 +99,40 @@ p {
   font-weight: bold;
   font-family: Verdana;
   height: 300px;
-}
+} */
 
-.p_div {
+/* .p_div {
 
   height: 300px;
   background-color: #16A085;
+} */
+
+.top-130 {
+  top: 130px !important;
+}
+
+.vh-100 {
+  height: calc(100vh - 130px) !important;
+}
+
+.mat-sidenav-bg {
+  background-color: #138d75;
+}
+
+.mat-sidenav-container-bg {
+  background-color: #828285;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.mat-sidenav-custome{
+  padding: 2rem;
+
+}
+
+.active-route{
+  border-bottom: 2px solid white;
+  padding-bottom: 5px
 }

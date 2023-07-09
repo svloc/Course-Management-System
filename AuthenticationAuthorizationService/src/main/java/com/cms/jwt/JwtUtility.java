@@ -1,8 +1,11 @@
 package com.cms.jwt;
 
 import java.util.Date;
+import java.util.function.Function;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.cms.service.UserDetailsImpl;
@@ -37,6 +40,28 @@ public class JwtUtility {
    public String getUsernameFromToken(String token) {
       Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
       return claims.getSubject();
+   }
+
+   public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+      final Claims claims = extractAllClaims(token);
+      return claimsResolver.apply(claims);
+   }
+
+   private Claims extractAllClaims(String token) {
+      return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+   }
+
+   public Date extractExpiration(String token) {
+      return extractClaim(token, Claims::getExpiration);
+   }
+
+   private Boolean isTokenExpired(String token) {
+      return extractExpiration(token).before(new Date());
+   }
+
+   public Boolean validateToken(String token, UserDetails userDetails) {
+      final String username = getUsernameFromToken(token);
+      return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
    }
 
    public Boolean validateToken(String token) {

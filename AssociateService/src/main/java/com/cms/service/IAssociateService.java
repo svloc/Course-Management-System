@@ -1,9 +1,6 @@
 package com.cms.service;
 
 import java.util.List;
-
-// import org.springframework.web.bind.annotation.PathVariable;
-
 import com.cms.exception.AssociateInvalidException;
 import com.cms.model.Associate;
 
