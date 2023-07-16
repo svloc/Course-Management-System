@@ -31,7 +31,7 @@ public class AssociateController {
     public ResponseEntity<?> addAssociate(@RequestBody Associate associate,
             @RequestHeader("Authorization") String authorization) {
         // Check if the token is valid using the AuthenticationAuthorizationProxy
-        if (!authService.isValidToken(authorization)) {
+        if (!authService.isValidToken(authorization, "ROLE_ADMIN")) {
             // If the token is not valid, return an unauthorized response
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

@@ -11,6 +11,9 @@ import com.cms.exception.CourseInvalidException;
 import com.cms.model.Course;
 import com.cms.repository.CourseRepository;
 import com.cms.service.CourseServiceImpl;
+import com.cms.service.SequenceGeneratorService;
+
+// import org.junit.jupiter.api.Assertions;
 import java.util.Optional;
 
 //Write Unit Tests for the methods in the CourseServiceImpl
@@ -21,6 +24,10 @@ public class CourseServiceImplTest {
 
     @InjectMocks
     private CourseServiceImpl courseService;
+
+    @InjectMocks
+    private SequenceGeneratorService seqService;
+
 
     @Before
     public void setup() {
@@ -76,6 +83,8 @@ public class CourseServiceImplTest {
             fail("Should not throw an exception");
         }
     }
+    
+
 
 	// 3. check whether the findFeedbackRatingForCourseId	returns the feedback rating for the given courseId
     @Test

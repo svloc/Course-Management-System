@@ -19,9 +19,10 @@ export class AuthService {
     return this.http.post(loginUrl, user).toPromise()
       .then((res: any) => {
         localStorage.setItem('accessToken', res.accessToken);
+        localStorage.setItem('roles',res.roles);
         this.logstatus.emit('loggedIn');
         return true; // Return true to indicate successful login
-      })
+      }, (error) => { console.log("error==>", error); return false; })
       .catch((error: any) => {
         return false; // Return false to indicate failed login
       });
@@ -30,6 +31,7 @@ export class AuthService {
     return localStorage.getItem("accessToken");
   }
   logout(): void {
+    localStorage.removeItem('roles');
     localStorage.removeItem("accessToken");
   }
 }

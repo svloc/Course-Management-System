@@ -1,5 +1,6 @@
-<mat-toolbar class="mat-elevation-z5 fixed-top navbar-bg">
+<mat-toolbar class="mat-elevation-z5 fixed-top navbar-bg d-flex justify-content-between align-items-center">
     <h2>TekGain</h2>
+    <button *ngIf="flag" class="btn btn-outline-warning" (click)="logout()">Logout</button>
 </mat-toolbar>
 
 <mat-toolbar class="mat-elevation-z5 bg-green gap-4 fixed-top top-65" *ngIf="flag">

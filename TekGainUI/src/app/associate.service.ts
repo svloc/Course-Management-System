@@ -12,62 +12,46 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
+
 export class AssociateService {
   host: string = '';
   token: any = "";
   returnMsg: any = '';
-  public api_associate: string = '';
 
   constructor(private http: HttpClient, private authService: AuthService) {
-    this.api_associate = environment.apiUrl;
+    this.host = environment.apiUrl + '/associate';
+    this.token = localStorage.getItem('accessToken');
+  }
+
+  private createAuthHeaders(): HttpHeaders {
+    return new HttpHeaders({ 'Authorization': `Bearer ${this.token}` });
   }
 
   addAssociate(associate: Object): Observable<Object> {
-    this.token=localStorage.getItem('accessToken');
+    const headers = this.createAuthHeaders();
     try {
-      // Set the headers with the authorization bearer token
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${this.token}`
-      });
-
-      // Send a POST request to the addCourse URL with the course object and headers
-      return this.http.post(this.api_associate + '/associate/addAssociate', associate, { headers });
+      return this.http.post(`${this.host}/addAssociate`, associate, { headers });
     } catch (error) {
-      console.log("An unexpected error occurred while adding the course: ", error);
-      return null;
+      return throwError('Something went wrong. Please try again later.');
     }
   }
 
   updateAssociate(associateId: string, associateAddress: string): Observable<Object> {
-    this.token=localStorage.getItem('accessToken');
+    const headers = this.createAuthHeaders();
+    const associate = { associateId, associateAddress };
     try {
-      // Set the headers with the authorization bearer token
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${this.token}`
-      });
-      const associate = { associateId:associateId,associateAddress: associateAddress };
-      // Send a POST request to the addCourse URL with the course object and headers
-      return this.http.put(this.api_associate + `/associate/updateAssociate/${associateId}/${associateAddress}`, associate,{ headers });
+      return this.http.put(`${this.host}/updateAssociate/${associateId}/${associateAddress}`, associate, { headers });
     } catch (error) {
-      console.log("An unexpected error occurred while adding the course: ", error);
-      return null;
+      return throwError('Something went wrong. Please try again later.');
     }
   }
 
   viewAssociates(): Observable<any> {
-    this.token=localStorage.getItem('accessToken');
+    const headers = this.createAuthHeaders();
     try {
-      // Set the headers with the authorization bearer token
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${this.token}`
-      });
-      // Send a POST request to the addCourse URL with the course object and headers
-      return this.http.get(this.api_associate + '/associate/viewAll', { headers });
+      return this.http.get(`${this.host}/viewAll`, { headers });
     } catch (error) {
-      console.log("An unexpected error occurred while adding the course: ", error);
-      return null;
+      return throwError('Something went wrong. Please try again later.');
     }
-
   }
-
 }

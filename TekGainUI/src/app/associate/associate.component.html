@@ -1,12 +1,15 @@
 <mat-sidenav-container class="vh-100  top-130 position-relative mat-sidenav-container-bg">
     <mat-sidenav mode="side" opened class="h-100 mat-sidenav-bg mat-sidenav-custome">
-        <p routerLink="/associate" [queryParams]="{ paramFlag: '1' }" routerLinkActive="active-route" class="cursor-pointer ">Add Associate</p>
-        <p routerLink="/associate" [queryParams]="{ paramFlag: '2' }" routerLinkActive="active-route" class="cursor-pointer ">Update Associate</p>
-        <p routerLink="/associate" [queryParams]="{ paramFlag: '3' }" routerLinkActive="active-route" class="cursor-pointer ">View Associate</p>
+        <p routerLink="/associate" [queryParams]="{ paramFlag: '1' }" routerLinkActive="active-route"
+            class="cursor-pointer " *ngIf="access(['ROLE_ADMIN'])">Add Associate</p>
+        <p routerLink="/associate" [queryParams]="{ paramFlag: '2' }" routerLinkActive="active-route"
+            class="cursor-pointer ">Update Associate</p>
+        <p routerLink="/associate" [queryParams]="{ paramFlag: '3' }" routerLinkActive="active-route"
+            class="cursor-pointer ">View Associate</p>
     </mat-sidenav>
     <mat-sidenav-content class="px-4 py-3">
         <h4>Associate Management System</h4>
-        <div *ngIf="paramFlag == 1" class="text-center d-flex justify-content-center">
+        <div *ngIf="paramFlag == 1 && access(['ROLE_ADMIN'])" class="text-center d-flex justify-content-center">
             <form (ngSubmit)="addAssociate()">
                 <h2> Add Associate</h2>
                 <table>
@@ -14,7 +17,8 @@
                         <td>
                             <mat-form-field class="example-full-width">
                                 <mat-label>Associate Id</mat-label>
-                                <input matInput id="associateId" name="associateId" [(ngModel)]="associateModel.associateId">
+                                <input matInput id="associateId" name="associateId"
+                                    [(ngModel)]="associateModel.associateId" disabled>
                             </mat-form-field>
                         </td>
                     </tr>
@@ -65,7 +69,8 @@
                     <tr>
                         <td>
                             <mat-form-field class="example-full-width">
-                                <mat-select [(ngModel)]="associateModel.associateId" id="associateId" name="associateId">
+                                <mat-label>Associate Id</mat-label>
+                                <mat-select [(ngModel)]="associate.associateId" id="associateId" name="associateId">
                                     <mat-option *ngFor="let associate of associates" [value]="associate.associateId">
                                         {{ associate.associateId }}
                                     </mat-option>
@@ -77,7 +82,7 @@
                         <td>
                             <mat-form-field class="example-full-width">
                                 <mat-label>Associate Address</mat-label>
-                                <input matInput name="associateAddress" [(ngModel)]="associateModel.associateAddress"
+                                <input matInput name="associateAddress" [(ngModel)]="associate.associateAddress"
                                     id="associateAddress">
                             </mat-form-field>
                         </td>
@@ -97,16 +102,16 @@
             </form>
         </div>
 
-        <div *ngIf="paramFlag == 3" class="text-center d-flex justify-content-center">
+        <div *ngIf="paramFlag == 3" class="text-center d-flex justify-content-center flex-column align-items-center w-75 m-auto">
             <form (ngSubmit)="viewAssociates()">
                 <h2>Associate details</h2>
                 <table>
                     <tr>
                         <td>
                             <mat-form-field class="example-full-width">
-                                <mat-select [(ngModel)]="associateModel.associateId" id="associateId" name="associateId">
-                                    <mat-option *ngFor="let associate of associates"
-                                        [value]="associate.associateId">
+                                <mat-label>Associate Id</mat-label>
+                                <mat-select [(ngModel)]="associateId" id="associateId" name="associateId">
+                                    <mat-option *ngFor="let associate of associates" [value]="associate.associateId">
                                         {{ associate.associateId }}
                                     </mat-option>
                                 </mat-select>
@@ -116,26 +121,31 @@
                             <button class="btn btn-dark" type="submit" id="viewAssociate">View Associate</button>
                         </td>
                     </tr>
-                </table>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Associate Id</th>
-                            <th scope="col">Associate Name</th>
-                            <th scope="col">Associate EmailId</th>
-                            <th scope="col">Address</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let associate of associatesById">
-                            <td>{{associate.associateId}}</td>
-                            <td>{{associate.associateName}}</td>
-                            <td>{{associate.associateEmailId}}</td>
-                            <td>{{associate.associateAddress}}</td>
-                        </tr>
-                    </tbody>
+                    <tr>
+                        <td>
+                            <div *ngIf="error" id="error">{{error}}</div>
+                        </td>
+                    </tr>
                 </table>
             </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Associate Id</th>
+                        <th scope="col">Associate Name</th>
+                        <th scope="col">Associate EmailId</th>
+                        <th scope="col">Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let associate of associatesById">
+                        <td>{{associate.associateId}}</td>
+                        <td>{{associate.associateName}}</td>
+                        <td>{{associate.associateEmailId}}</td>
+                        <td>{{associate.associateAddress}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

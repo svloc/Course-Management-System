@@ -1,10 +1,15 @@
 package com.cms.jwt;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -33,8 +38,19 @@ public class JwtUtility {
       UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
       Date now = new Date();
       Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
-      return Jwts.builder().setSubject(userPrincipal.getUsername()).setIssuedAt(new Date()).setExpiration(expiryDate)
-            .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+
+      Collection<? extends GrantedAuthority> authorities = userPrincipal.getAuthorities();
+      String roles = authorities.stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.joining(","));
+
+      return Jwts.builder()
+            .setSubject(userPrincipal.getUsername())
+            .claim("roles", roles)
+            .setIssuedAt(new Date())
+            .setExpiration(expiryDate)
+            .signWith(SignatureAlgorithm.HS512, jwtSecret)
+            .compact();
    }
 
    public String getUsernameFromToken(String token) {
@@ -83,7 +99,18 @@ public class JwtUtility {
    }
 
    public Claims getClaim(String token) {
-      return (Claims) Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+      return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
    }
 
+   public List<String> extractRoles(String token) {
+      Claims claims = getClaim(token);
+      String roles = (String) claims.get("roles");
+      return Arrays.asList(roles.split(","));
+   }
+
+   // private String getRolesFromAuthorities(Collection<? extends GrantedAuthority> authorities) {
+   //    return authorities.stream()
+   //          .map(GrantedAuthority::getAuthority)
+   //          .collect(Collectors.joining(","));
+   // }
 }

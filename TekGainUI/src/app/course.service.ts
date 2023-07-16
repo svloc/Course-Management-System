@@ -15,92 +15,57 @@ export class CourseService {
   token: any = "";
   returnMsg: any = '';
 
-  public api_course: string = '';
-
   ngOnInit() {
-      // Retrieve the token from local storage
+    // Retrieve the token from local storage
   }
 
   constructor(private http: HttpClient, private authService: AuthService) {
-    this.api_course = environment.apiUrl;
+    this.host = environment.apiUrl + '/course';
+    this.token = localStorage.getItem('accessToken');
+  }
+  private createAuthHeaders(): HttpHeaders {
+    return new HttpHeaders({ 'Authorization': `Bearer ${this.token}` });
   }
 
   addCourse(course: Object): Observable<Object> {
     try {
-      this.token=localStorage.getItem('accessToken');
-      // Set the headers with the authorization bearer token
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${this.token}`
-      });
-
-      // Send a POST request to the addCourse URL with the course object and headers
-      return this.http.post(this.api_course + '/course/addCourse', course, { headers });
+      const headers = this.createAuthHeaders();
+      return this.http.post(this.host + '/addCourse', course, { headers });
     } catch (error) {
-      console.log("An unexpected error occurred while adding the course: ", error);
-      return null;
+      return throwError('Something went wrong. Please try again later.');
     }
   }
-
-
-  // updateCourse(courseId: string, duration: number): Observable<Object> {
-  //   try {
-  //     this.token=localStorage.getItem('accessToken');
-  //     // Set the headers with the authorization bearer token
-  //     const headers = new HttpHeaders({
-  //       'Authorization': `Bearer ${this.token}`
-  //     });
-  //     // Send a PUT request to the addCourse URL with the course object and headers
-  //     return this.http.put(this.api_course + `/course/update/${courseId}/${duration}`, { headers });
-  //   } catch (error) {
-  //     console.log("An unexpected error occurred while updating the course: ", error);
-  //     return null;
-  //   }
-  // }
 
   updateCourse(courseId: string, duration: number): Observable<Object> {
     try {
-      this.token = localStorage.getItem('accessToken');
-      // Set the headers with the authorization bearer token
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${this.token}`
-      });
-      // Create the course object to be updated
-      const course = { courseId:courseId,duration: duration };
+      const headers = this.createAuthHeaders();
+      const course = { courseId: courseId, duration: duration };
       // Send a PUT request to update the course with the course object and headers
-      return this.http.put(this.api_course + `/course/update/${courseId}/${duration}`,course, { headers });
+      return this.http.put(this.host + `/update/${courseId}/${duration}`, course, { headers });
     } catch (error) {
-      console.log("An unexpected error occurred while updating the course: ", error);
-      return null;
+      return throwError('Something went wrong. Please try again later.');
     }
   }
-  
+
   viewAllCourses(): Observable<any> {
-    this.token=localStorage.getItem('accessToken');
+    this.token = localStorage.getItem('accessToken');
     try {
-      // Set the headers with the authorization bearer token
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${this.token}`
-      });
+      const headers = this.createAuthHeaders();
       // Send a POST request to the addCourse URL with the course object and headers
-      return this.http.get(this.api_course + '/course/viewAll', { headers });
+      return this.http.get(this.host + '/viewAll', { headers });
     } catch (error) {
-      console.log("An unexpected error occurred while adding the course: ", error);
-      return null;
+      return throwError('Something went wrong. Please try again later.');
     }
 
   }
 
   disableCourse(courseId: string): Observable<Object> {
     try {
-      // Set the headers with the authorization bearer token
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${this.token}`
-      });
+      const headers = this.createAuthHeaders();
       // Send a POST request to the addCourse URL with the course object and headers
-      return this.http.delete(this.api_course + '/course/deactivateCourse/'+courseId, { headers });
+      return this.http.delete(this.host + '/deactivateCourse/' + courseId, { headers });
     } catch (error) {
-      console.log("An unexpected error occurred while adding the course: ", error);
-      return null;
+      return throwError('Something went wrong. Please try again later.');
     }
   }
 }

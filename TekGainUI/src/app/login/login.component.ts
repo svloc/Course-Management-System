@@ -21,12 +21,27 @@ export class LoginComponent implements OnInit {
    }
 
    onClickSubmit() {
-      if (!this.authService.login(this.user)) {
-         this.errorMsg = "Invalid username/Password";
+      const trimmedUsername = this.user.username?.trim();
+      const trimmedPassword = this.user.password?.trim();
+
+      if (!trimmedUsername || !trimmedPassword) {
+         this.errorMsg = "Username and password cannot be empty.";
          return;
-      } else {
-         this.errorMsg = "";
       }
 
+      this.user.username = trimmedUsername;
+      this.user.password = trimmedPassword;
+
+      this.authService.login(this.user)
+         .then((loggedIn: boolean) => {
+            if (!loggedIn) {
+               this.errorMsg = "Invalid username/password";
+            } else {
+               this.errorMsg = "";
+            }
+         })
+         .catch((error: any) => {
+            this.errorMsg = "An unexpected error occurred during login.";
+         });
    }
 }

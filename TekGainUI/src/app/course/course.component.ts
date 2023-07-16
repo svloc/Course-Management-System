@@ -38,19 +38,38 @@ export class CourseComponent implements OnInit {
   ngOnInit() {
     this._Activatedroute.queryParams.subscribe(params => {
       this.paramFlag = params.paramFlag;
+      this.message = '';
+      this.error = '';
+      this.courseId = '';
     });
     this.viewAll()
   }
-
   ngOnDestroy() {
-
     //  fill the code
-
   }
+  constructor(private courseService: CourseService, private router: Router, private _Activatedroute: ActivatedRoute) {
 
-  constructor(private courseService: CourseService, private router: Router, private _Activatedroute: ActivatedRoute) { }
+   }
 
   addCourse(): void {
+    this.error = '';
+    this.message = '';
+    if (!this.courseModel.courseName) {
+      this.error = "Course Name is required.";
+      return;
+    }
+    if (this.courseModel.fees < 0) {
+      this.error = "Fees must be a positive integer.";
+      return;
+    }
+    if (this.courseModel.duration <= 0) {
+      this.error = "Duration must be a positive integer & Greater than 0.";
+      return;
+    }
+    if (!this.courseModel.courseType) {
+      this.error = "Course Type is required.";
+      return;
+    }
     this.courseService.addCourse(this.courseModel).subscribe(
       (res) => {
         this.message = "Course added successfully";
@@ -66,6 +85,17 @@ export class CourseComponent implements OnInit {
   }
 
   updateCourse(): void {
+    this.error = '';
+    this.message = '';
+
+    if (!this.courseId) {
+      this.error = "Course Id is required.";
+      return;
+    }
+    if (this.duration <= 0) {
+      this.error = "Duration must be a positive integer & Greater than 0.";
+      return;
+    }
     this.courseService.updateCourse(this.courseId, this.duration).subscribe(
       (res) => {
         this.viewAll()
@@ -81,8 +111,13 @@ export class CourseComponent implements OnInit {
     );
 
   }
-
   viewCourseById(): void {
+    this.error = '';
+    this.message = '';
+    if (!this.courseId) {
+      this.error = "Course Id is required.";
+      return;
+    }
     const course = this.courses.find((c) => c.courseId === this.courseId);
     if (course) {
       // If a course with the given courseId is found
@@ -95,6 +130,12 @@ export class CourseComponent implements OnInit {
   }
 
   viewRatings() {
+    this.error = '';
+    this.message = '';
+    if (!this.courseId) {
+      this.error = "Course Id is required.";
+      return;
+    }
     const course = this.courses.find((c) => c.courseId === this.courseId);
     if (course) {
       // If a course with the given courseId is found
@@ -109,6 +150,12 @@ export class CourseComponent implements OnInit {
   }
 
   disableCourse(): void {
+    this.error = '';
+    this.message = '';
+    if (!this.courseId) {
+      this.error = "Course Id is required.";
+      return;
+    }
     this.courseService.disableCourse(this.courseId).subscribe(
       (res) => {
         this.viewAll()
@@ -117,6 +164,7 @@ export class CourseComponent implements OnInit {
         this.error = '';
       },
       (error) => {
+        console.log(error);
         this.message = '';
         this.error = "No admissions found for the given course ID.";
       }
@@ -124,7 +172,7 @@ export class CourseComponent implements OnInit {
 
   }
 
-  viewAll():void{
+  viewAll(): void {
     this.courseService.viewAllCourses().subscribe(
       (res) => {
         this.courses = res;
@@ -134,5 +182,9 @@ export class CourseComponent implements OnInit {
       }
     );
   }
-
+  
+  access(roles:string[]){
+    const currentUser=localStorage.getItem('roles');
+    return roles.some(x => x ==currentUser);
+  }
 }

@@ -25,4 +25,5 @@ public class Admission implements Serializable {
 	private String associateId;
 	private int fees;
 	private String feedback;
+	private float rating;
 }

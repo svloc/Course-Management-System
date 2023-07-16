@@ -13,9 +13,9 @@ import com.cms.repository.CourseRepository;
 @Transactional
 public class CourseServiceImpl implements ICourseService {
 
-	@Autowired private CourseRepository courseRepository;
+	@Autowired CourseRepository courseRepository;
 
-	@Autowired private SequenceGeneratorService seqGeneratorService;
+	@Autowired SequenceGeneratorService seqGeneratorService;
 
 	@Override
 	public Course addCourse(Course cObj) throws CourseInvalidException {

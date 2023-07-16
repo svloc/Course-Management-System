@@ -76,6 +76,7 @@ public class AdmissionController {
         try {
             // Retrieve course and associate information from respective proxies
             ResponseEntity<Course> courseResponse = courseProxy.viewByCourseId(courseId, authorization);
+
             ResponseEntity<Associate> associateResponse = associateProxy.viewByAssociateId(associateId, authorization);
 
             // Check if both course and associate are found successfully
@@ -84,6 +85,7 @@ public class AdmissionController {
 
             if (isCourseFound && isAssociateFound) {
                 // Register associate for the course using the admission service
+                admission.setFees(courseResponse.getBody().getFees());
                 Admission registeredAdmission = admissionService.registerAssociateForCourse(admission);
 
                 if (registeredAdmission != null) {
@@ -102,11 +104,11 @@ public class AdmissionController {
                     return ResponseEntity.ok(registeredAdmission);
                 } else {
                     // Return internal server error response if registration fails
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Associate Id already exists.");
                 }
             } else {
                 // Return not found response if either course or associate is not found
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Associate/Course Id does not exists.");
             }
         } catch (AdmissionInvalidException e) {
             // Return internal server error response if admission is invalid or any
@@ -133,7 +135,7 @@ public class AdmissionController {
     @PutMapping("/calculateFees/{associateId}")
     public ResponseEntity<Object> calculateFees(@PathVariable("associateId") String associateId,
             @RequestHeader("Authorization") String authorization) {
-        if (!authService.isValidToken(authorization)) {
+        if (!authService.isValidToken(authorization, "ROLE_ADMIN")) {
             // If the token is not valid, return an unauthorized response
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -225,7 +227,7 @@ public class AdmissionController {
     @DeleteMapping("/deactivate/{courseId}")
     public ResponseEntity<Object> deactivateAdmission(@PathVariable("courseId") String courseId,
             @RequestHeader("Authorization") String authorization) {
-        if (!authService.isValidToken(authorization)) {
+        if (!authService.isValidToken(authorization, "ROLE_ADMIN")) {
             // If the token is not valid, return an unauthorized response
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -257,7 +259,7 @@ public class AdmissionController {
 
     // }
 
-    @PostMapping(value = "/makePayment/{registrationId},{fees}", produces = "application/json")
+    @PostMapping(value = "/makePayment/{registrationId}/{fees}", produces = "application/json")
     public ResponseEntity<String> makePayment(@RequestHeader("Authorization") String authorization,
             @PathVariable int registrationId, @PathVariable int fees) throws IOException {
         if (!authService.isValidToken(authorization)) {
@@ -287,14 +289,14 @@ public class AdmissionController {
             }
 
         } catch (PayPalRESTException e) {
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
     }
 
     @GetMapping("/viewAll")
-    public ResponseEntity<List<Admission>> viewAllAssociates(@RequestHeader("Authorization") String authorization) {
+    public ResponseEntity<List<Admission>> viewAllAdmissions(@RequestHeader("Authorization") String authorization) {
         if (!authService.isValidToken(authorization)) {
             // If the token is not valid, return an unauthorized response
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -308,7 +310,7 @@ public class AdmissionController {
 
     // @GetMapping(value = CANCEL_URL)
     // public String cancelPay() {
-    //     return "cancel";
+    // return "cancel";
     // }
 
     @GetMapping(value = SUCCESS_URL)

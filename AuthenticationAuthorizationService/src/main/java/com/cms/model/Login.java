@@ -1,8 +1,14 @@
 package com.cms.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Document(collection = "users")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Login {
 	
 	private String username;

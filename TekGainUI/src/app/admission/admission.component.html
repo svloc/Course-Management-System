@@ -1,31 +1,59 @@
 <mat-sidenav-container class="vh-100  top-130 position-relative mat-sidenav-container-bg">
     <mat-sidenav mode="side" opened class="h-100 mat-sidenav-bg mat-sidenav-custome">
-        <p routerLink="/admission" [queryParams]="{ paramFlag: 1 }" routerLinkActive="active-route" class="cursor-pointer ">Associate Registration</p>
-        <p routerLink="/admission" [queryParams]="{ paramFlag: 2 }" routerLinkActive="active-route" class="cursor-pointer ">Calculate Total Fee</p>
-        <p routerLink="/admission" [queryParams]="{ paramFlag: 3 }" routerLinkActive="active-route" class="cursor-pointer ">Add Feedback</p>
-        <p routerLink="/admission" [queryParams]="{ paramFlag: 4 }" routerLinkActive="active-route" class="cursor-pointer ">Highest Fee</p>
-        <p routerLink="/admission" [queryParams]="{ paramFlag: 5 }" routerLinkActive="active-route" class="cursor-pointer ">View Feedback</p>
-        <p routerLink="/admission" [queryParams]="{ paramFlag: 6 }" routerLinkActive="active-route" class="cursor-pointer ">Make Payment</p>
+        <p routerLink="/admission" [queryParams]="{ paramFlag: 1 }" routerLinkActive="active-route"
+            class="cursor-pointer " *ngIf="access(['ROLE_ADMIN'])">Associate Registration</p>
+        <p routerLink="/admission" [queryParams]="{ paramFlag: 2 }" routerLinkActive="active-route"
+            class="cursor-pointer " *ngIf="access(['ROLE_ADMIN'])">Calculate Total Fee</p>
+        <p routerLink="/admission" [queryParams]="{ paramFlag: 3 }" routerLinkActive="active-route"
+            class="cursor-pointer ">Add Feedback</p>
+        <p routerLink="/admission" [queryParams]="{ paramFlag: 4 }" routerLinkActive="active-route"
+            class="cursor-pointer " *ngIf="access(['ROLE_ADMIN'])">Highest Fee</p>
+        <p routerLink="/admission" [queryParams]="{ paramFlag: 5 }" routerLinkActive="active-route"
+            class="cursor-pointer ">View Feedback</p>
+        <p routerLink="/admission" [queryParams]="{ paramFlag: 6 }" routerLinkActive="active-route"
+            class="cursor-pointer ">Make Payment</p>
     </mat-sidenav>
     <mat-sidenav-content class="px-4 py-3">
         <h4>Admission Management System</h4>
-        <div *ngIf="paramFlag == 1" class="text-center d-flex justify-content-center">
+        <div *ngIf="paramFlag == 1 && access(['ROLE_ADMIN'])" class="text-center d-flex justify-content-center">
             <form (ngSubmit)="registration()">
                 <h2>Associate Registration</h2>
                 <table>
                     <tr>
+                        <!-- <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Associate Id</mat-label>
+                                <input type="number" matInput name="associateId"
+                                    [(ngModel)]="admissionModel.associateId" id="associateId">
+                            </mat-form-field>
+                        </td> -->
                         <td>
                             <mat-form-field class="example-full-width">
                                 <mat-label>Associate Id</mat-label>
-                                <input matInput name="associateId" [(ngModel)]="admissionModel.associateId" id="associateId">
+                                <mat-select [(ngModel)]="admissionModel.associateId" id="associateId"
+                                    name="associateId">
+                                    <mat-option *ngFor="let associate of associates" [value]="associate.associateId">
+                                        {{ associate.associateId }}
+                                    </mat-option>
+                                </mat-select>
                             </mat-form-field>
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <!-- <td>
                             <mat-form-field class="example-full-width">
                                 <mat-label>Course Id</mat-label>
-                                <input matInput id="courseId" name="courseId" [(ngModel)]="admissionModel.courseId">
+                                <input matInput id="courseId" type="number" name="courseId" [(ngModel)]="admissionModel.courseId">
+                            </mat-form-field>
+                        </td> -->
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Course Id*</mat-label>
+                                <mat-select [(ngModel)]="admissionModel.courseId" id="duration" name="courseId">
+                                    <mat-option *ngFor="let course of courses" [value]="course.courseId">
+                                        {{ course.courseId }}
+                                    </mat-option>
+                                </mat-select>
                             </mat-form-field>
                         </td>
                     </tr>
@@ -42,13 +70,14 @@
             </form>
         </div>
 
-        <div *ngIf="paramFlag == 2" class="text-center d-flex justify-content-center">
+        <div *ngIf="paramFlag == 2 && access(['ROLE_ADMIN'])" class="text-center d-flex justify-content-center">
             <form (ngSubmit)="totalFees()">
                 <h2>Total Fee Calculation</h2>
                 <table>
                     <tr>
                         <td>
                             <mat-form-field class="example-full-width">
+                                <mat-label>Associate Id</mat-label>
                                 <mat-select [(ngModel)]="associateId" id="associateId" name="associateId">
                                     <mat-option *ngFor="let admission of admissions" [value]="admission.associateId">
                                         {{ admission.associateId }}
@@ -59,7 +88,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="btn btn-dark" type="submit" id="totalFees">Update Course</button>
+                            <button class="btn btn-dark" type="submit" id="totalFees">Calculate</button>
                         </td>
                     </tr>
                     <tr>
@@ -79,7 +108,8 @@
                     <tr>
                         <td>
                             <mat-form-field class="example-full-width">
-                                <mat-select [(ngModel)]="admission.registrationId" id="registrationId"
+                                <mat-label>Registration Id</mat-label>
+                                <mat-select [(ngModel)]="admissionModel.registrationId" id="registrationId"
                                     name="registrationId">
                                     <mat-option *ngFor="let admission of admissions" [value]="admission.registrationId">
                                         {{ admission.registrationId }}
@@ -92,7 +122,7 @@
                         <td>
                             <mat-form-field class="example-full-width">
                                 <mat-label>Feedback</mat-label>
-                                <textarea matInput name="feedback" [(ngModel)]="admission.feedback"
+                                <textarea matInput name="feedback" [(ngModel)]="admissionModel.feedback"
                                     id="feedback"></textarea>
                             </mat-form-field>
                         </td>
@@ -101,7 +131,8 @@
                         <td>
                             <mat-form-field class="example-full-width">
                                 <mat-label>Rating</mat-label>
-                                <input matInput type="number" name="rating" [(ngModel)]="admission.rating" id="rating">
+                                <input matInput type="number" name="rating" [(ngModel)]="admissionModel.rating"
+                                    id="rating">
                             </mat-form-field>
                         </td>
                     </tr>
@@ -119,14 +150,15 @@
             </form>
         </div>
 
-        <div *ngIf="paramFlag == 4" class="text-center d-flex justify-content-center">
+        <div *ngIf="paramFlag == 4 && access(['ROLE_ADMIN'])" class="text-center d-flex justify-content-center">
             <form (ngSubmit)="highestFee()">
                 <h2>Highest of Fees</h2>
                 <table>
                     <tr>
                         <td>
                             <mat-form-field class="example-full-width">
-                                <mat-select [(ngModel)]="admission.associateId" id="associateId" name="associateId">
+                                <mat-label>Associate Id</mat-label>
+                                <mat-select [(ngModel)]="associateId" id="associateId" name="associateId">
                                     <mat-option *ngFor="let admission of admissions" [value]="admission.associateId">
                                         {{ admission.associateId }}
                                     </mat-option>
@@ -156,8 +188,9 @@
                     <tr>
                         <td>
                             <mat-form-field class="example-full-width">
-                                <mat-select [(ngModel)]="admission.courseId" id="courseId" name="courseId">
-                                    <mat-option *ngFor="let admission of admissions" [value]="admission.courseId">
+                                <mat-label>Course Id</mat-label>
+                                <mat-select [(ngModel)]="courseId" id="courseId" name="courseId">
+                                    <mat-option *ngFor="let admission of AdmissionsArray" [value]="admission.courseId">
                                         {{ admission.courseId }}
                                     </mat-option>
                                 </mat-select>
@@ -165,29 +198,15 @@
                         </td>
                         <td> <button class="btn btn-dark" type="submit" id="viewFeedback">View Feedback</button></td>
                     </tr>
+                    <tr>
+                        <td>
+                            <div *ngIf="error" id="error">{{ error }}</div>
+                        </td>
+                    </tr>
                 </table>
-                <p>{{feedbackArray[0]}}</p>
-                <!-- <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Registration Id</th>
-                            <th scope="col">Course Id</th>
-                            <th scope="col">Associate Id</th>
-                            <th scope="col">Feedback</th>
-                            <th scope="col">Ratings</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let admission of feedbackArray">
-                            <td>{{admission.registrationId}}</td>
-                            <td>{{admission.courseId}}</td>
-                            <td>{{admission.associateId}}</td>
-                            <td>{{admission.feedback}}</td>
-                            <td>{{admission.rating}}</td>
-                        </tr>
-                    </tbody>
-                </table> -->
+                <ul class="list-group list-group-flush text-start">
+                    <li class="list-group-item" *ngFor="let feedback of feedbackArray; let i=index;">{{i+1}} . {{feedback}}</li>
+                  </ul>
             </form>
         </div>
 
@@ -206,8 +225,8 @@
                     <tr>
                         <td>
                             <mat-form-field class="example-full-width">
-                                <mat-select [(ngModel)]="admission.registrationId" id="registrationId"
-                                    name="registrationId">
+                                <mat-label>Registration Id</mat-label>
+                                <mat-select [(ngModel)]="registrationId" id="registrationId" name="registrationId">
                                     <mat-option *ngFor="let admission of admissions" [value]="admission.registrationId">
                                         {{ admission.registrationId }}
                                     </mat-option>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,7 +9,7 @@ import { AuthService } from './auth.service';
 export class AppComponent implements OnInit {
   title = 'TekGain';
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,private router:Router) { }
   public flag = false;
   ngOnInit(): void {
     this.authService.logstatus.subscribe((status: string) => {
@@ -21,6 +22,9 @@ export class AppComponent implements OnInit {
     }
   }
 
+  logout():void{
+    this.authService.logout();
+    this.flag=false;
+  }
+
 }
-
-

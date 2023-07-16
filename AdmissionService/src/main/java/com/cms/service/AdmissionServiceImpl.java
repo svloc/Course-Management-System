@@ -31,13 +31,19 @@ public class AdmissionServiceImpl implements IAdmissionService {
 	public static final String CANCEL_URL = "pay/cancel";
 
 	public Admission registerAssociateForCourse(Admission admission) throws AdmissionInvalidException {
+		List<Admission> admissionsList = admissionRepository.findCoursesByAssociateId(admission.getAssociateId());
+
 		Admission admission2;
+
 		try {
 			// Generate a new registrationId using the sequence generator service
-			admission.setRegistrationId(seqGeneratorService.generateAdmissionId());
-
-			// Save the admission details to the repository
-			admission2 = admissionRepository.save(admission);
+			if (admissionsList.isEmpty()) {
+				admission.setRegistrationId(seqGeneratorService.generateAdmissionId());
+				// Save the admission details to the repository
+				admission2 = admissionRepository.save(admission);
+			} else {
+				throw new AdmissionInvalidException("Associate Id already exists.");
+			}
 		} catch (IllegalArgumentException e) {
 			// If the registrationId already exists, throw an AdmissionInvalidException
 			throw new AdmissionInvalidException("AdmissionId already exists");
@@ -140,61 +146,67 @@ public class AdmissionServiceImpl implements IAdmissionService {
 		return true;
 	}
 
-	public boolean makePayment(int registartionId) throws AdmissionInvalidException{
-		Admission admission = admissionRepository.findById((long)registartionId).orElse(null);
-		boolean result=true;
+	public boolean makePayment(int registartionId) throws AdmissionInvalidException {
+		Admission admission = admissionRepository.findById((long) registartionId).orElse(null);
+		boolean result = true;
 		if (admission == null) {
-			result=false;
+			result = false;
 			throw new AdmissionInvalidException("Invalid Registration Id");
 		}
 		return result;
 	}
 
-	// public boolean makePayment(int registartionId) throws AdmissionInvalidException {
-	// 	Admission admission = admissionRepository.findById((long)registartionId).orElse(null);
-	// 	// Check if the admission exists
-	// 	if (admission == null) {
-	// 		throw new AdmissionInvalidException("Invalid Registration Id");
-	// 	}
-	// 	Order order = new Order(admission.getFees(), "USD", "paypal", "sale", "Product 1");
+	// public boolean makePayment(int registartionId) throws
+	// AdmissionInvalidException {
+	// Admission admission =
+	// admissionRepository.findById((long)registartionId).orElse(null);
+	// // Check if the admission exists
+	// if (admission == null) {
+	// throw new AdmissionInvalidException("Invalid Registration Id");
+	// }
+	// Order order = new Order(admission.getFees(), "USD", "paypal", "sale",
+	// "Product 1");
 
-	// 	try {
-	// 		Payment payment = paypalService.createPayment(order.getPrice(), order.getCurrency(), order.getMethod(),
-	// 				order.getIntent(), order.getDescription(), "http://localhost:9093/" + CANCEL_URL,
-	// 				"http://localhost:9093/" + SUCCESS_URL);
-	// 		for (Links link : payment.getLinks()) {
-	// 			if (link.getRel().equals("approval_url")) {
-	// 				String a = "redirect:" + link.getHref();
-	// 				if (!a.isEmpty() && !link.getHref().isEmpty()) {
-	// 					return true;
-	// 				}
-	// 			}
-	// 		}
+	// try {
+	// Payment payment = paypalService.createPayment(order.getPrice(),
+	// order.getCurrency(), order.getMethod(),
+	// order.getIntent(), order.getDescription(), "http://localhost:9093/" +
+	// CANCEL_URL,
+	// "http://localhost:9093/" + SUCCESS_URL);
+	// for (Links link : payment.getLinks()) {
+	// if (link.getRel().equals("approval_url")) {
+	// String a = "redirect:" + link.getHref();
+	// if (!a.isEmpty() && !link.getHref().isEmpty()) {
+	// return true;
+	// }
+	// }
+	// }
 
-	// 	} catch (PayPalRESTException e) {
+	// } catch (PayPalRESTException e) {
 
-	// 		e.printStackTrace();
-	// 	}
-	// 	return false;
+	// e.printStackTrace();
+	// }
+	// return false;
 	// }
 
 	// @GetMapping(value = CANCEL_URL)
 	// public String cancelPay() {
-	// 	return "cancel";
+	// return "cancel";
 	// }
 
 	// @GetMapping(value = SUCCESS_URL)
-	// public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
-	// 	try {
-	// 		Payment payment = paypalService.executePayment(paymentId, payerId);
-	// 		System.out.println(payment.toJSON());
-	// 		if (payment.getState().equals("approved")) {
-	// 			return "success";
-	// 		}
-	// 	} catch (PayPalRESTException e) {
-	// 		System.out.println(e.getMessage());
-	// 	}
-	// 	return "redirect:/";
+	// public String successPay(@RequestParam("paymentId") String paymentId,
+	// @RequestParam("PayerID") String payerId) {
+	// try {
+	// Payment payment = paypalService.executePayment(paymentId, payerId);
+	// System.out.println(payment.toJSON());
+	// if (payment.getState().equals("approved")) {
+	// return "success";
+	// }
+	// } catch (PayPalRESTException e) {
+	// System.out.println(e.getMessage());
+	// }
+	// return "redirect:/";
 	// }
 
 	public List<Admission> viewAll() {

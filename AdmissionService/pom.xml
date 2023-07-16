@@ -89,6 +89,12 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
+          <!-- new added spring securit -->
+        <!-- <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency> -->
+
 
 	</dependencies>
 	<dependencyManagement>

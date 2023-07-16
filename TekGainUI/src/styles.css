@@ -62,10 +62,6 @@ h2 {
   color: White;
 }
 
-/* body{
-  background-color: #16A085 ;
-} */
-
 /* .flex-container {
   display: flex;
   width:500px; 
@@ -112,7 +108,7 @@ body {
 }
 
 .vh-100 {
-  height: calc(100vh - 130px) !important;
+  height: calc(100vh - 135px) !important;
 }
 
 .mat-sidenav-bg {
@@ -135,4 +131,28 @@ body {
 .active-route{
   border-bottom: 2px solid white;
   padding-bottom: 5px
+}
+
+table{
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,td {
+  border-color: #000 !important;
+  color: #000 !important;
+  padding: .35rem .5rem !important;
+  border-bottom-width: 2px !important;
+  background-color: #828285 !important;
+}
+td{
+  border-bottom-width: 0px !important;
+}
+
+.list-group-item {
+  color: #fff;
+  background: #828285 !important;
+}
+input,#result,#error,textarea{
+  color: #fff !important;
 }

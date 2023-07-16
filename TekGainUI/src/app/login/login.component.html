@@ -1,5 +1,5 @@
-<form class="form-container" (ngSubmit)="onClickSubmit()" >
-    <div class="form-group w-100 mb-3">
+<form class="form-container d-flex justify-content-center align-items-center m-auto flex-column" (ngSubmit)="onClickSubmit()" >
+    <div class="form-group w-100 mb-4">
         <label for="userName">User Name</label>
         <input type="text" class="form-control" id="userName" placeholder="Username" [(ngModel)]="user.username" name="username">
     </div>
@@ -7,7 +7,7 @@
         <label for="password">Password</label>
         <input type="password" class="form-control" id="password" placeholder="Password" [(ngModel)]="user.password" name="password">
     </div>
-    <button type="submit" id="login" class="btn btn-lg btn-primary">Sign in</button>
+    <button type="submit" id="login" class="btn btn-primary">Sign in</button>
     <div *ngIf="errorMsg">{{errorMsg}}</div>
 </form>
 
